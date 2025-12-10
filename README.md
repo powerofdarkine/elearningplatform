@@ -1,8 +1,25 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Set up Database (MySQL)
+Fisrt, setup your local host using MySQL Configurator. Choose root user
+
+Open MySQL Workbend connect to local host. Import the .sql files in Database folder.
+
+Run the .sql file in sequence: task 1.1 -> task 1.2 -> task 2.1 -> task 2.3 -> task 2.4 -> task 2.2
+
+Change the password in .env file to your root password of your local host
+# Format: mysql://USER:PASSWORD@HOST:PORT/DATABASE
+DATABASE_URL="mysql://root:PASSWORD@localhost:3306/elearning_db"
+
+```bash
+npx prisma db pull
+
+npx prisma generate
+
+
 ## Getting Started
 
-First, run the development server:
+Second, run the development server:
 
 ```bash
 npm run dev

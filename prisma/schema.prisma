@@ -1,0 +1,345 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model administrator {
+  Admin_ID Int        @id
+  Role     String     @db.VarChar(50)
+  user     user       @relation(fields: [Admin_ID], references: [ID], onDelete: Cascade, map: "administrator_ibfk_1")
+  aprrove  aprrove[]
+  organize organize[]
+}
+
+model answer {
+  QuizID        Int
+  QuestionID    Int
+  AAnswer       String        @db.VarChar(500)
+  quiz_question quiz_question @relation(fields: [QuizID, QuestionID], references: [QuizID, QuestionID], onDelete: Cascade, map: "answer_ibfk_1")
+
+  @@id([QuizID, QuestionID, AAnswer])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model aprrove {
+  CourseID      Int           @id
+  AdminID       Int
+  Status        String?       @default("Pending") @db.VarChar(50)
+  course        course        @relation(fields: [CourseID], references: [CourseID], onDelete: Cascade, map: "aprrove_ibfk_1")
+  administrator administrator @relation(fields: [AdminID], references: [Admin_ID], map: "aprrove_ibfk_2")
+
+  @@index([AdminID], map: "AdminID")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model assessment_method {
+  AssessmentID Int          @id @default(autoincrement())
+  Weight_Ratio Decimal      @db.Decimal(5, 2)
+  Release_date DateTime?    @db.DateTime(0)
+  Due_date     DateTime?    @db.DateTime(0)
+  CourseID     Int
+  course       course       @relation(fields: [CourseID], references: [CourseID], onDelete: Cascade, map: "assessment_method_ibfk_1")
+  attempt_in   attempt_in[]
+  project      project?
+  quiz         quiz?
+
+  @@index([CourseID], map: "CourseID")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model attempt_in {
+  StudentID         Int
+  AssessmentID      Int
+  Score             Decimal?          @db.Decimal(5, 2)
+  Feedback          String?           @db.Text
+  Attempt_Date      DateTime          @default(now()) @db.DateTime(0)
+  end_user          end_user          @relation(fields: [StudentID], references: [End_userID], onDelete: Cascade, map: "attempt_in_ibfk_1")
+  assessment_method assessment_method @relation(fields: [AssessmentID], references: [AssessmentID], onDelete: Cascade, map: "attempt_in_ibfk_2")
+
+  @@id([StudentID, AssessmentID])
+  @@index([AssessmentID], map: "AssessmentID")
+}
+
+model category {
+  CourseID  Int
+  ACategory String @db.VarChar(100)
+  course    course @relation(fields: [CourseID], references: [CourseID], onDelete: Cascade, map: "category_ibfk_1")
+
+  @@id([CourseID, ACategory])
+}
+
+model certificate {
+  Cer_ID     Int      @id @default(autoincrement())
+  Cer_Name   String   @db.VarChar(255)
+  Issue_Date DateTime @db.Date
+  CourseID   Int
+  course     course   @relation(fields: [CourseID], references: [CourseID], map: "certificate_ibfk_1")
+  receive    receive?
+
+  @@index([CourseID], map: "CourseID")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model competition {
+  Name        String        @id @db.VarChar(255)
+  Description String?       @db.Text
+  Start_date  DateTime      @db.DateTime(0)
+  End_date    DateTime      @db.DateTime(0)
+  organize    organize[]
+  participate participate[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model course {
+  CourseID                                        Int                 @id @default(autoincrement())
+  courseName                                      String              @unique(map: "courseName") @db.VarChar(255)
+  Description                                     String?             @db.Text
+  Difficulty_Level                                String?             @db.VarChar(50)
+  Price                                           Decimal             @default(0.00) @db.Decimal(10, 2)
+  aprrove                                         aprrove?
+  assessment_method                               assessment_method[]
+  category                                        category[]
+  certificate                                     certificate[]
+  create                                          create[]
+  enroll                                          enroll[]
+  language                                        language[]
+  lesson                                          lesson[]
+  paid_for                                        paid_for[]
+  prerequisites_prerequisites_PrecourseIDTocourse prerequisites[]     @relation("prerequisites_PrecourseIDTocourse")
+  prerequisites_prerequisites_SubcourseIDTocourse prerequisites[]     @relation("prerequisites_SubcourseIDTocourse")
+  review_on                                       review_on[]
+}
+
+model create {
+  CourseID      Int
+  InstructorID  Int
+  Creation_Date DateTime @default(dbgenerated("(curdate())")) @db.Date
+  course        course   @relation(fields: [CourseID], references: [CourseID], onDelete: Cascade, map: "create_ibfk_1")
+  end_user      end_user @relation(fields: [InstructorID], references: [End_userID], map: "create_ibfk_2")
+
+  @@id([CourseID, InstructorID])
+  @@index([InstructorID], map: "InstructorID")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model end_user {
+  End_userID              Int                       @id
+  SFlag                   Boolean?                  @default(false)
+  Background              String?                   @db.Text
+  IFlag                   Boolean?                  @default(false)
+  Specialization          String?                   @db.VarChar(255)
+  attempt_in              attempt_in[]
+  create                  create[]
+  user                    user                      @relation(fields: [End_userID], references: [ID], onDelete: Cascade, map: "end_user_ibfk_1")
+  enroll                  enroll[]
+  language_of_instruction language_of_instruction[]
+  participate             participate[]
+  payment                 payment[]
+  receive                 receive[]
+  review                  review[]
+  study                   study[]
+}
+
+model enroll {
+  StudentID       Int
+  CourseID        Int
+  Enrollment_Date DateTime @default(now()) @db.DateTime(0)
+  end_user        end_user @relation(fields: [StudentID], references: [End_userID], onDelete: Cascade, map: "enroll_ibfk_1")
+  course          course   @relation(fields: [CourseID], references: [CourseID], map: "enroll_ibfk_2")
+
+  @@id([StudentID, CourseID])
+  @@index([CourseID], map: "CourseID")
+}
+
+model language {
+  CourseID  Int
+  Alanguage String @db.VarChar(50)
+  course    course @relation(fields: [CourseID], references: [CourseID], onDelete: Cascade, map: "language_ibfk_1")
+
+  @@id([CourseID, Alanguage])
+}
+
+model language_of_instruction {
+  ID        Int
+  Alanguage String   @db.VarChar(50)
+  end_user  end_user @relation(fields: [ID], references: [End_userID], onDelete: Cascade, map: "language_of_instruction_ibfk_1")
+
+  @@id([ID, Alanguage])
+}
+
+model lesson {
+  LessonID        Int               @id @default(autoincrement())
+  LessonTitle     String            @db.VarChar(255)
+  CourseID        Int
+  course          course            @relation(fields: [CourseID], references: [CourseID], onDelete: Cascade, map: "lesson_ibfk_1")
+  lesson_resource lesson_resource[]
+  study           study[]
+
+  @@unique([LessonTitle, CourseID], map: "uk_Lesson_Title_Course")
+  @@index([CourseID], map: "CourseID")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model lesson_resource {
+  LessonID      Int
+  ResourceID    Int
+  Resource_Type String  @db.VarChar(50)
+  Storage_URL   String  @db.VarChar(1024)
+  FileName      String? @db.VarChar(255)
+  lesson        lesson  @relation(fields: [LessonID], references: [LessonID], onDelete: Cascade, map: "lesson_resource_ibfk_1")
+
+  @@id([LessonID, ResourceID])
+}
+
+model method {
+  PaymentID Int
+  StudentID Int
+  Amethod   String  @db.VarChar(50)
+  payment   payment @relation(fields: [PaymentID, StudentID], references: [PaymentID, StudentID], onDelete: Cascade, map: "method_ibfk_1")
+
+  @@id([PaymentID, StudentID, Amethod])
+}
+
+model organize {
+  AdminID         Int
+  CompetitionName String        @db.VarChar(255)
+  administrator   administrator @relation(fields: [AdminID], references: [Admin_ID], onDelete: Cascade, map: "organize_ibfk_1")
+  competition     competition   @relation(fields: [CompetitionName], references: [Name], onDelete: Cascade, map: "organize_ibfk_2")
+
+  @@id([AdminID, CompetitionName])
+  @@index([CompetitionName], map: "CompetitionName")
+}
+
+model paid_for {
+  PaymentID Int
+  StudentID Int
+  CourseID  Int
+  payment   payment @relation(fields: [PaymentID, StudentID], references: [PaymentID, StudentID], map: "paid_for_ibfk_1")
+  course    course  @relation(fields: [CourseID], references: [CourseID], map: "paid_for_ibfk_2")
+
+  @@id([PaymentID, StudentID])
+  @@index([CourseID], map: "CourseID")
+}
+
+model participate {
+  StudentID       Int
+  CompetitionName String      @db.VarChar(255)
+  end_user        end_user    @relation(fields: [StudentID], references: [End_userID], onDelete: Cascade, map: "participate_ibfk_1")
+  competition     competition @relation(fields: [CompetitionName], references: [Name], onDelete: Cascade, map: "participate_ibfk_2")
+
+  @@id([StudentID, CompetitionName])
+  @@index([CompetitionName], map: "CompetitionName")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model payment {
+  PaymentID Int       @default(autoincrement())
+  StudentID Int
+  TimeStamp DateTime  @default(now()) @db.DateTime(0)
+  Amount    Decimal   @db.Decimal(10, 2)
+  method    method[]
+  paid_for  paid_for?
+  end_user  end_user  @relation(fields: [StudentID], references: [End_userID], map: "payment_ibfk_1")
+
+  @@id([PaymentID, StudentID])
+  @@index([StudentID], map: "StudentID")
+}
+
+model prerequisites {
+  PrecourseID                              Int
+  SubcourseID                              Int
+  course_prerequisites_PrecourseIDTocourse course @relation("prerequisites_PrecourseIDTocourse", fields: [PrecourseID], references: [CourseID], onDelete: Cascade, map: "prerequisites_ibfk_1")
+  course_prerequisites_SubcourseIDTocourse course @relation("prerequisites_SubcourseIDTocourse", fields: [SubcourseID], references: [CourseID], onDelete: Cascade, map: "prerequisites_ibfk_2")
+
+  @@id([PrecourseID, SubcourseID])
+  @@index([SubcourseID], map: "SubcourseID")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model project {
+  ProjectID         Int               @id
+  Team_size         Int?              @default(1)
+  Description       String?           @db.Text
+  Name              String?           @db.VarChar(255)
+  assessment_method assessment_method @relation(fields: [ProjectID], references: [AssessmentID], onDelete: Cascade, map: "project_ibfk_1")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model quiz {
+  QuizID            Int               @id
+  Num_attempt       Int?              @default(1)
+  Passing_score     Decimal           @db.Decimal(5, 2)
+  Time_limit        Int?
+  assessment_method assessment_method @relation(fields: [QuizID], references: [AssessmentID], onDelete: Cascade, map: "quiz_ibfk_1")
+  quiz_question     quiz_question[]
+}
+
+model quiz_question {
+  QuizID        Int
+  QuestionID    Int
+  Question_Text String   @db.Text
+  Type          String   @db.VarChar(50)
+  answer        answer[]
+  quiz          quiz     @relation(fields: [QuizID], references: [QuizID], onDelete: Cascade, map: "quiz_question_ibfk_1")
+
+  @@id([QuizID, QuestionID])
+}
+
+model receive {
+  Cer_ID      Int         @id
+  StudentID   Int
+  certificate certificate @relation(fields: [Cer_ID], references: [Cer_ID], map: "receive_ibfk_1")
+  end_user    end_user    @relation(fields: [StudentID], references: [End_userID], onDelete: Cascade, map: "receive_ibfk_2")
+
+  @@index([StudentID], map: "StudentID")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model review {
+  ReviewID    Int        @default(autoincrement())
+  StudentID   Int
+  Description String?    @db.Text
+  Rating      Int
+  Timestamp   DateTime   @default(now()) @db.DateTime(0)
+  end_user    end_user   @relation(fields: [StudentID], references: [End_userID], onDelete: Cascade, map: "review_ibfk_1")
+  review_on   review_on?
+
+  @@id([ReviewID, StudentID])
+  @@index([StudentID], map: "StudentID")
+}
+
+model review_on {
+  ReviewID  Int
+  StudentID Int
+  CourseID  Int
+  review    review @relation(fields: [ReviewID, StudentID], references: [ReviewID, StudentID], onDelete: Cascade, map: "review_on_ibfk_1")
+  course    course @relation(fields: [CourseID], references: [CourseID], onDelete: Cascade, map: "review_on_ibfk_2")
+
+  @@id([ReviewID, StudentID])
+  @@index([CourseID], map: "CourseID")
+}
+
+model study {
+  LessonID  Int
+  StudentID Int
+  lesson    lesson   @relation(fields: [LessonID], references: [LessonID], onDelete: Cascade, map: "study_ibfk_1")
+  end_user  end_user @relation(fields: [StudentID], references: [End_userID], onDelete: Cascade, map: "study_ibfk_2")
+
+  @@id([LessonID, StudentID])
+  @@index([StudentID], map: "StudentID")
+}
+
+model user {
+  ID            Int            @id @default(autoincrement())
+  Name          String         @db.VarChar(100)
+  Email         String         @unique(map: "Email") @db.VarChar(100)
+  Street        String?        @db.VarChar(255)
+  City          String?        @db.VarChar(100)
+  Postal_Code   String?        @db.VarChar(20)
+  administrator administrator?
+  end_user      end_user?
+}
