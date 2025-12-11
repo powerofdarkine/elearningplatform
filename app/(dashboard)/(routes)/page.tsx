@@ -1,8 +1,8 @@
 import { getDashboardCourses } from "@/actions/get-dashboard";
 import { DashboardCourseCard } from "../_components/dashboard-course-card";
-import { UserButton } from "@clerk/nextjs";
+import { CircleDollarSign } from "lucide-react";
 
-// Helper for images (reuse the one from search)
+// Helper for images
 const getCourseImage = (categoryName: string) => {
     const map: Record<string, string> = {
       "Music": "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=800&q=80",
@@ -21,10 +21,9 @@ const getCourseImage = (categoryName: string) => {
 }
 
 export default async function Dashboard() {
-  const userId = 24; // Hardcoded user
-  const { completedCourses, coursesInProgress, preferenceString } = await getDashboardCourses(userId);
+  const userId = 24; 
+  const { completedCourses, coursesInProgress, preferenceString, totalAmountDue } = await getDashboardCourses(userId);
   
-  // Parse Preferences String: "Cloud (67.00%), Database (33.00%)"
   const preferences = preferenceString.split(',').map(p => {
     const match = p.trim().match(/^(.+) \(([\d.]+)%\)$/);
     if (match) {
@@ -36,41 +35,68 @@ export default async function Dashboard() {
   const allCourses = [...coursesInProgress, ...completedCourses];
 
   return (
-    <div className="p-6 space-y-4">
+    <div className="p-6 space-y-6">
       
-      {/* 1. Statistics / Preferences Section */}
-      {preferences.length > 0 && (
-          <div className="space-y-4 mb-8">
-            {preferences.map((pref, idx) => (
-                <div key={idx} className="w-full max-w-md">
-                    <div className="flex justify-between text-sm font-medium mb-1 text-sky-700">
-                        <span>{pref.label} ({pref.percentage}%)</span>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        
+        {/* Statistics */}
+        {preferences.length > 0 ? (
+            <div className="bg-white p-6 rounded-xl border shadow-sm space-y-4">
+                <h3 className="font-semibold text-slate-700 mb-2">Interest Overview</h3>
+                {preferences.map((pref, idx) => (
+                    <div key={idx} className="w-full">
+                        <div className="flex justify-between text-xs font-medium mb-1 text-slate-600">
+                            <span>{pref.label}</span>
+                            <span>{pref.percentage}%</span>
+                        </div>
+                        <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                            <div 
+                                className="h-full rounded-full" 
+                                style={{ 
+                                    width: `${pref.percentage}%`,
+                                    backgroundColor: idx % 2 === 0 ? '#0369a1' : '#10b981' 
+                                }} 
+                            />
+                        </div>
                     </div>
-                    <div className="h-2 w-full bg-slate-200 rounded-full border border-slate-300">
-                        <div 
-                            className="h-full rounded-full" 
-                            style={{ 
-                                width: `${pref.percentage}%`,
-                                backgroundColor: idx % 2 === 0 ? '#0369a1' : '#10b981' // Alternating colors (Sky/Emerald)
-                            }} 
-                        />
-                    </div>
-                </div>
-            ))}
-          </div>
-      )}
+                ))}
+            </div>
+        ) : (
+            <div className="bg-white p-6 rounded-xl border shadow-sm flex items-center justify-center text-slate-400 text-sm">
+                No learning stats available yet.
+            </div>
+        )}
 
-      {/* 2. Course Grid */}
+        {/* Fee Card */}
+        <div className="bg-white p-6 rounded-xl border shadow-sm flex flex-col justify-center items-center gap-2 text-center h-full">
+            <div className="p-4 bg-emerald-100 rounded-full mb-2">
+                <CircleDollarSign className="h-10 w-10 text-emerald-700" />
+            </div>
+            <div>
+                <p className="text-sm font-medium text-muted-foreground">Total Fee Due</p>
+                <h2 className="text-3xl font-bold text-slate-800 mt-1">
+                    {new Intl.NumberFormat("en-US", {
+                        style: "currency",
+                        currency: "USD",
+                    }).format(totalAmountDue)}
+                </h2>
+            </div>
+        </div>
+
+      </div>
+
+      <h2 className="text-xl font-semibold text-slate-800">My Courses</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {allCourses.map((course) => (
           <DashboardCourseCard
             key={course.CourseID}
             id={course.CourseID.toString()}
             title={course.courseName}
-            imageUrl={getCourseImage(course.Category[0]?.ACategory || "General")}
+            imageUrl={getCourseImage(course.category?.[0]?.ACategory || "General")}
             chaptersLength={course.chaptersLength}
             progress={course.progress || 0}
-            category={course.Category[0]?.ACategory || "General"}
+            category={course.category?.[0]?.ACategory || "General"}
+            isPaid={course.isPaid} // <--- PASS THE PROP
           />
         ))}
       </div>

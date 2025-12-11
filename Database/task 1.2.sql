@@ -191,23 +191,23 @@ INSERT INTO End_user (End_userID, SFlag, Background, IFlag, Specialization) VALU
 -- 4. LANGUAGE_OF_INSTRUCTION (each instructor at least 1 language)
 INSERT INTO Language_Of_Instruction (ID, Alanguage) VALUES
 (6, 'English'),
-(7, 'Vietnamese'),
+(7, 'English'),
 (8, 'French'),
 (9, 'Spanish'),
 (10, 'German'),
-(11, 'Japanese'),
+(11, 'English'),
 (12, 'English'),
-(13, 'Vietnamese'),
+(13, 'Spanish'),
 (14, 'French'),
 (15, 'Spanish'),
 (16, 'German'),
-(17, 'Japanese'),
+(17, 'English'),
 (18, 'English'),
-(19, 'Vietnamese'),
+(19, 'German'),
 (20, 'French'),
 (21, 'Spanish'),
 (22, 'German'),
-(23, 'Japanese');
+(23, 'French');
 -- (52, 'English'),
 -- (53, 'Vietnamese');
 
@@ -238,39 +238,40 @@ INSERT INTO Course (courseName, Description, Difficulty_Level, Price) VALUES
 
 -- 6. CATEGORY (1 per Course)
 INSERT INTO Category (CourseID, ACategory) VALUES
-(1,  'Programming'),
+(1,  'Database'),
 (2,  'Database'),
-(3,  'Web'),
-(4,  'Math'),
-(5,  'History'),
-(6,  'Data Science'),
-(7,  'Cloud'),
-(8,  'Design'),
-(9,  'Programming'),
-(10, 'Database'),
-(11, 'Web'),
-(12, 'Math'),
-(13, 'History'),
-(14, 'Data Science'),
-(15, 'Cloud');
+(3,  'Programming'),
+(4,  'Programming'),
+(5,  'Web'),
+(6,  'Web'),
+(7,  'Math'),
+(8,  'Math'),
+(9,  'History'),
+(10, 'History'),
+(11, 'Data Science'),
+(12, 'Data Science'),
+(13, 'Data Science'),
+(14, 'Cloud'),
+(15, 'Data Science');
 
 -- 7. LANGUAGE (1 per Course)
-INSERT INTO Language (CourseID, Alanguage) VALUES
-(1,  'English'),
-(2,  'Vietnamese'),
-(3,  'French'),
-(4,  'English'),
-(5,  'Vietnamese'),
-(6,  'French'),
-(7,  'English'),
-(8,  'Vietnamese'),
-(9,  'French'),
+INSERT INTO Language (CourseID, ALanguage) VALUES
+(1, 'English'), (1, 'French'),
+(2, 'English'), (2, 'French'),
+(3, 'French'), (3, 'Spanish'),
+(4, 'French'), (4, 'Spanish'),
+(5, 'Spanish'),
+(6, 'Spanish'),
+(7, 'English'), (7, 'Chinese'),
+(8, 'Chinese'), (8, 'English'),
+(9, 'German'),
 (10, 'English'),
-(11, 'Vietnamese'),
-(12, 'French'),
-(13, 'English'),
-(14, 'Vietnamese'),
+(11, 'English'),
+(12, 'English'),
+(13, 'Spanish'),
+(14, 'Chinese'),
 (15, 'French');
+
 
 -- 8. PREREQUISITES (một số ví dụ)
 INSERT INTO Prerequisites (PrecourseID, SubcourseID) VALUES
@@ -368,11 +369,11 @@ INSERT INTO Lesson (LessonTitle, CourseID) VALUES
 -- Course 12: Advanced Machine Learning
 ('Deep Neural Networks & Regularization',       12),
 -- Course 13: Data Visualization
-('Principles of Effective Data Visualization',  13);
+('Principles of Effective Data Visualization',  13),
 -- Course 14: Cloud Computing
 -- ('Cloud Service Models: IaaS, PaaS, SaaS',      14),
 -- Course 15: Data Engineering 101
--- ('Building Data Pipelines & ETL Basics',        15);
+('Building Data Pipelines & ETL Basics',        15);
 
 INSERT INTO Lesson_Resource (LessonID, ResourceID, Resource_Type, Storage_URL, FileName) VALUES
 -- Course 1: Intro to SQL
@@ -408,11 +409,11 @@ INSERT INTO Lesson_Resource (LessonID, ResourceID, Resource_Type, Storage_URL, F
 -- Course 12: Advanced Machine Learning
 (20, 1, 'video',    'http://cdn.example.com/deep_learning_regularization',      'deep_learning_regularization.mp4'),
 -- Course 13: Data Visualization
-(21, 1, 'video',    'http://cdn.example.com/data_viz_principles',               'data_viz_principles.mp4');
+(21, 1, 'video',    'http://cdn.example.com/data_viz_principles',               'data_viz_principles.mp4'),
 -- Course 14: Cloud Computing
 -- (22, 1, 'video',    'http://cdn.example.com/cloud_service_models',              'cloud_service_models.mp4'),
 -- Course 15: Data Engineering 101
--- (23, 1, 'video',    'http://cdn.example.com/etl_data_pipelines',                'etl_data_pipelines.mp4');
+(22, 1, 'video',    'http://cdn.example.com/etl_data_pipelines',                'etl_data_pipelines.mp4');
 
 /* ================================================================================
  PHASE 4: ASSESSMENTS
@@ -428,69 +429,69 @@ INSERT INTO Lesson_Resource (LessonID, ResourceID, Resource_Type, Storage_URL, F
 --   Quiz1: ID=3c-2, Quiz2: ID=3c-1, Project: ID=3c
 INSERT INTO Assessment_Method (AssessmentID, Weight_Ratio, Release_date, Due_date, CourseID) VALUES
 -- Course 1 (created 2024-02-15)
-(1,  0.30, '2024-03-01', '2024-03-15', 1),
-(2,  0.50, '2024-04-01', '2024-04-15', 1),
-(3,  0.20, '2024-05-01', '2024-05-20', 1),
+(1,  0.30, '2023-06-10', '2025-06-10', 1),
+(2,  0.50, '2023-06-10', '2025-04-15', 1),
+(3,  0.20, '2023-06-10', '2025-05-20', 1),
 
 -- Course 2 (created 2023-06-10)
-(4,  0.30, '2023-07-01', '2023-07-15', 2),
-(5,  0.30, '2023-08-01', '2023-08-15', 2),
-(6,  0.40, '2023-09-01', '2023-09-20', 2),
+(4,  0.30, '2024-02-15', '2025-02-15', 2),
+(5,  0.30, '2024-02-15', '2025-02-15', 2),
+(6,  0.40, '2024-02-15', '2025-02-15', 2),
 
 -- Course 3 (created 2023-11-05)
-(7,  0.20, '2023-11-20', '2023-12-05', 3),
-(8,  0.20, '2023-12-20', '2024-01-05', 3),
-(9,  0.60, '2024-01-20', '2024-02-10', 3),
+(7,  0.20, '2023-11-05', '2025-11-05', 3),
+(8,  0.20, '2023-11-05', '2025-11-05', 3),
+(9,  0.60, '2023-11-05', '2025-11-05', 3),
 
 -- Course 4 (created 2025-01-20)
-(10, 0.10, '2025-02-01', '2025-02-15', 4),
-(11, 0.10, '2025-03-01', '2025-03-15', 4),
-(12, 0.80, '2025-04-01', '2025-04-20', 4),
+(10, 0.10, '2025-02-01', '2025-12-15', 4),
+(11, 0.10, '2025-02-01', '2025-12-15', 4),
+(12, 0.80, '2025-02-01', '2025-12-20', 4),
 
 -- Course 5 (created 2025-04-02)
-(13, 0.40, '2025-04-20', '2025-05-05', 5),
-(14, 0.40, '2025-05-20', '2025-06-05', 5),
-(15, 0.20, '2025-06-20', '2025-07-10', 5),
+(13, 0.40, '2025-04-20', '2025-12-05', 5),
+(14, 0.40, '2025-04-20', '2025-12-05', 5),
+(15, 0.20, '2025-04-20', '2025-12-10', 5),
 
 -- Course 6 (created 2025-07-18)
-(16, 0.30, '2025-08-01', '2025-08-15', 6),
-(17, 0.30, '2025-09-01', '2025-09-15', 6),
-(18, 0.40, '2025-10-01', '2025-10-20', 6),
+(16, 0.30, '2025-08-01', '2025-12-15', 6),
+(17, 0.30, '2025-08-01', '2025-12-15', 6),
+(18, 0.40, '2025-08-01', '2025-12-20', 6),
 
 -- Course 7 (created 2023-10-01)
-(19, 0.20, '2023-10-15', '2023-10-30', 7),
-(20, 0.20, '2023-11-15', '2023-11-30', 7),
-(21, 0.60, '2023-12-15', '2024-01-05', 7),
+(19, 0.20, '2023-10-15', '2025-12-30', 7),
+(20, 0.20, '2023-10-15', '2025-12-30', 7),
+(21, 0.60, '2023-10-15', '2025-12-30', 7),
 
 -- Course 8 (created 2023-01-12)
-(22, 0.20, '2023-02-01', '2023-02-15', 8),
-(23, 0.10, '2023-03-01', '2023-03-15', 8),
-(24, 0.70, '2023-04-01', '2023-04-20', 8),
+(22, 0.20, '2023-02-01', '2025-02-15', 8),
+(23, 0.10, '2023-02-01', '2025-03-15', 8),
+(24, 0.70, '2023-02-01', '2025-04-20', 8),
 
 -- Course 9 (created 2024-03-28)
-(25, 0.20, '2024-04-10', '2024-04-25', 9),
-(26, 0.20, '2024-05-10', '2024-05-25', 9),
-(27, 0.60, '2024-06-10', '2024-06-30', 9),
+(25, 0.20, '2024-04-10', '2025-04-25', 9),
+(26, 0.20, '2024-04-10', '2025-05-25', 9),
+(27, 0.60, '2024-04-10', '2025-06-30', 9),
 
 -- Course 10 (created 2023-05-09)
-(28, 0.10, '2023-05-20', '2023-06-05', 10),
-(29, 0.10, '2023-06-20', '2023-07-05', 10),
-(30, 0.80, '2023-07-20', '2023-08-10', 10),
+(28, 0.10, '2023-05-20', '2025-06-05', 10),
+(29, 0.10, '2023-05-20', '2025-07-05', 10),
+(30, 0.80, '2023-05-20', '2025-08-10', 10),
 
 -- Course 11 (created 2025-06-21)
-(31, 0.20, '2025-07-05', '2025-07-20', 11),
-(32, 0.20, '2025-08-05', '2025-08-20', 11),
-(33, 0.60, '2025-09-05', '2025-09-30', 11),
+(31, 0.20, '2025-07-05', '2025-12-20', 11),
+(32, 0.20, '2025-07-05', '2025-12-20', 11),
+(33, 0.60, '2025-07-05', '2025-12-30', 11),
 
 -- Course 12 (created 2024-08-03)
-(34, 0.20, '2024-08-20', '2024-09-05', 12),
-(35, 0.30, '2024-09-20', '2024-10-05', 12),
-(36, 0.50, '2024-10-20', '2024-11-10', 12),
+(34, 0.20, '2025-07-20', '2025-12-30', 12),
+(35, 0.30, '2025-07-20', '2025-12-30', 12),
+(36, 0.50, '2025-07-20', '2025-12-30', 12),
 
 -- Course 13 (created 2025-09-14)
-(37, 0.20, '2025-10-01', '2025-10-15', 13),
-(38, 0.20, '2025-11-01', '2025-11-15', 13),
-(39, 0.60, '2025-12-01', '2025-12-20', 13);
+(37, 0.20, '2025-10-01', '2025-12-15', 13),
+(38, 0.20, '2025-10-01', '2025-12-15', 13),
+(39, 0.60, '2025-10-01', '2025-12-20', 13),
 
 -- Course 14 (created 2023-10-26)
 -- (40, 0.20, '2023-11-05', '2023-11-20', 14),
@@ -498,42 +499,42 @@ INSERT INTO Assessment_Method (AssessmentID, Weight_Ratio, Release_date, Due_dat
 -- (42, 0.50, '2024-01-05', '2024-01-25', 14),
 
 -- Course 15 (created 2023-11-30)
--- (43, 0.30, '2023-12-10', '2023-12-25', 15),
--- (44, 0.10, '2024-01-10', '2024-01-25', 15),
--- (45, 0.60, '2024-02-10', '2024-03-01', 15);
+(40, 0.30, '2023-12-10', '2023-12-25', 15),
+(41, 0.10, '2024-01-10', '2024-01-25', 15),
+(42, 0.60, '2024-02-10', '2024-03-01', 15);
 
 -- 14. QUIZ (30 quizzes: AssessmentID = [1,2,4,5,7,8,...,43,44])
 INSERT INTO Quiz (QuizID, Num_attempt, Passing_score, Time_limit) VALUES
-(1,  3, 70.0, 50),
+(1,  1, 70.0, 50),
 (2,  3, 70.0, 50),
 (4,  3, 70.0, 60),
-(5,  3, 70.0, 40),
-(7,  3, 70.0, 70),
+(5,  2, 70.0, 40),
+(7,  1, 70.0, 70),
 (8,  3, 70.0, 30),
-(10, 3, 70.0, 80),
+(10, 1, 70.0, 80),
 (11, 3, 70.0, 30),
-(13, 3, 70.0, 40),
+(13, 1, 70.0, 40),
 (14, 3, 70.0, 30),
-(16, 3, 70.0, 30),
-(17, 3, 70.0, 30),
+(16, 1, 70.0, 30),
+(17, 1, 70.0, 30),
 (19, 3, 70.0, 30),
 (20, 3, 70.0, 30),
-(22, 3, 70.0, 30),
+(22, 5, 70.0, 30),
 (23, 3, 70.0, 30),
-(25, 3, 70.0, 30),
-(26, 3, 70.0, 50),
-(28, 3, 70.0, 30),
+(25, 1, 70.0, 30),
+(26, 1, 70.0, 50),
+(28, 1, 70.0, 30),
 (29, 3, 70.0, 30),
 (31, 3, 70.0, 60),
-(32, 3, 70.0, 30),
-(34, 3, 70.0, 70),
+(32, 2, 70.0, 30),
+(34, 2, 70.0, 70),
 (35, 3, 70.0, 40),
 (37, 3, 70.0, 120),
-(38, 3, 70.0, 90);
+(38, 3, 70.0, 90),
 -- (40, 3, 70.0, 60),
 -- (41, 3, 70.0, 45),
--- (43, 3, 70.0, 30),
--- (44, 3, 70.0, 90);
+(40, 3, 70.0, 30),
+(41, 3, 70.0, 90);
 
 -- 15. PROJECT (15 projects: AssessmentID = [3,6,9,...,45])
 -- 15. PROJECT (15 projects: AssessmentID = [3,6,9,...,45])
@@ -575,13 +576,13 @@ INSERT INTO Project (ProjectID, Team_size, Description, Name) VALUES
     'Advanced ML: Model Tuning Project'),
 -- Course 13: Data Visualization
 (39, 2, 'Design clear and effective charts to communicate insights from a dataset.', 
-    'Data Viz: Dashboard Project');
+    'Data Viz: Dashboard Project'),
 -- Course 14: Cloud Computing
 -- (42, 2, 'Deploy a simple application using a cloud service provider.', 
 --     'Cloud Computing: Cloud Deployment Project'),
 -- Course 15: Data Engineering 101
--- (45, 2, 'Design and implement a basic ETL pipeline from raw data to cleaned output.', 
---     'Data Engineering 101: ETL Pipeline');
+(42, 2, 'Design and implement a basic ETL pipeline from raw data to cleaned output.', 
+    'Data Engineering 101: ETL Pipeline');
 
 -- 16. QUIZ_QUESTION (ít nhất 1 câu hỏi cho 10 quiz đầu)
 INSERT INTO Quiz_Question (QuizID, QuestionID, Question_Text, Type) VALUES
@@ -623,13 +624,13 @@ INSERT INTO Quiz_Question (QuizID, QuestionID, Question_Text, Type) VALUES
 (35, 1, 'What does the term “gradient descent” refer to?', 'mcq'),
 -- Course 13: Data Visualization
 (37, 1, 'Which chart is best for showing proportions?', 'mcq'),
-(38, 1, 'What does a scatter plot visualize?', 'mcq');
+(38, 1, 'What does a scatter plot visualize?', 'mcq'),
 -- Course 14: Cloud Computing
 -- (40, 1, 'What does IaaS stand for?', 'mcq'),
 -- (41, 1, 'Which service model handles both infrastructure and runtime?', 'mcq'),
 -- Course 15: Data Engineering 101
--- (43, 1, 'What does ETL stand for?', 'mcq'),
--- (44, 1, 'Which system is commonly used for distributed data storage?', 'mcq');
+(40, 1, 'What does ETL stand for?', 'mcq'),
+(41, 1, 'Which system is commonly used for distributed data storage?', 'mcq');
 -- 17. ANSWER (2 đáp án mỗi câu hỏi ở trên)
 INSERT INTO Answer (QuizID, QuestionID, AAnswer) VALUES
 -- Quiz 1 (Intro to SQL – What does SQL stand for?)
@@ -819,38 +820,37 @@ INSERT INTO Answer (QuizID, QuestionID, AAnswer) VALUES
 */
 -- 18. ENROLL (mỗi student đăng ký 2 course)
 INSERT INTO Enroll (StudentID, CourseID, Enrollment_Date) VALUES
-    (24, 10, '2023-05-14'),  /* Student 24: has certificate for Course 10 (Modern History) */
+    (24, 10, '2023-05-14'), 
     (24, 15, '2024-11-05'),
 
-    (25, 1,  '2024-02-28'),  /* Student 25: has certificate for Course 1 (Intro to SQL) */
+    (25, 1,  '2024-02-28'),  
  
 	(26, 1, '2023-06-15' ),
-    (26, 2,  '2024-02-20'),  /* Student 26: has certificate for Course 2 (Advanced SQL) */
+    (26, 2,  '2024-02-20'), 
    
 
-    (27, 13, '2025-09-19'),  /* Student 27: has certificate for Course 13 (Data Visualization) */
+    (27, 13, '2025-09-19'), 
     (27, 3,  '2023-11-10'),
 
-    (28, 9,  '2024-04-02'),  /* Student 28: Cloud Computing rejected, so enroll 9 & 10 instead */
+    (28, 9,  '2024-04-02'),  
     (28, 10, '2023-05-14'),
 
-    (29, 15, '2023-12-05'),  /* Student 29: has certificate for Course 15 (Data Engineering 101) */
+    (29, 15, '2023-12-05'),  
     (29, 7,  '2023-10-06'),
 
-    (30, 1,  '2024-02-20'),  /* Student 30: has certificate for Course 1 (Intro to SQL) */
+    (30, 1,  '2024-02-20'), 
     (30, 2,  '2025-03-19'),
     (30, 6,  '2025-07-23'),
 
-    (31, 1,  '2023-06-15'),  /* Student 31: has certificate for Course 2 (Advanced SQL) */
+    (31, 1,  '2023-06-15'), 
     (31, 3,  '2023-11-10'),
 
-    (32, 3,  '2023-11-10'),  /* Student 32: has certificate for Course 3 (Intro to Python) */
+    (32, 3,  '2023-11-10'),  
     (32, 4,  '2025-01-25'),
 
-    (33, 3,  '2025-01-25'),  /* Student 33: has certificate for Course 4 (Advanced Python) */
+    (33, 3,  '2025-01-25'), 
     (33, 7, '2025-06-26'),
 
-    /* Students 34–51: pattern 2 course / student, only Approved courses */
     (34, 1,  '2024-02-20'),
     (34, 2,  '2025-06-15'),
 	(34, 7, '2024-06-26'),
@@ -902,10 +902,10 @@ INSERT INTO Enroll (StudentID, CourseID, Enrollment_Date) VALUES
     (51, 7,  '2023-10-06');
 
 
-
 INSERT INTO Study (LessonID, StudentID) VALUES
 -- Student 24 enrolled in courses 10 and 15 → dùng course 10 (Modern History)
 (18, 24),
+(22,24),
 -- Student 25 enrolled in courses 1 and 11 → dùng course 1 (Intro to SQL)
 (1, 25),
 -- Student 26 enrolled in courses 2 and 1 → dùng course 2 (Advanced SQL)
@@ -979,43 +979,27 @@ INSERT INTO Study (LessonID, StudentID) VALUES
 -- Student 51 enrolled in courses 6 and 7 → dùng course 6
 (14, 51);
 
--- 20. ATTEMPT_IN (một số học sinh làm quiz / project, một số không)
--- 20. ATTEMPT_IN (attempt dates aligned with release dates, scores 0–10, feedback logic applied)
-INSERT INTO Attempt_In (StudentID, AssessmentID, Score, Feedback, Attempt_Date) VALUES
--- Student 24 attempts Assessment 28 (Modern History quiz/project)
-(24, 28, 4.0,  'Need more revision', '2023-05-25'),
 
--- Student 26 attempts Assessment 34 (Advanced Machine Learning)
-(26, 34, 5.5,  'Good',               '2024-08-25'),
--- Student 28 attempts Assessment 40 (Cloud Computing)
--- (28, 40, 9.0,  'Excellent',          '2023-11-10'),
--- Student 30 attempts Assessment 1 (Intro to SQL)
+INSERT INTO Attempt_In (StudentID, AssessmentID, Score, Feedback, Attempt_Date) VALUES
+
+(26, 1, 5.5,  'Good',               '2024-08-25'),
+(26, 2, 7.0,  'Good',               '2024-08-25'),
+(26, 3, 7.5,  'Good',               '2024-09-25'),
 (30, 1,  7.0,  'Good',               '2024-03-06'),
 (30, 2,  8.5,  'Execellent',               '2024-03-06'),
-(30,3,4,'Need more revision','2024-03-06'),
--- Student 32 attempts Assessment 7 (Intro to Python)
+(30,3, 4, 'Need more revision','2024-05-06'),
 (32, 7,  8.5,  'Excellent',          '2023-11-25'),
--- Student 34 attempts Assessment 13 (Web Design Basics)
-(34, 13, 3.0,  'Need more revision', '2025-04-25'),
--- Student 36 attempts Assessment 19 (Calculus 101)
-(36, 19, 6.0,  'Good',               '2023-10-20'),
--- Student 38 attempts Assessment 25 (World History)
-(38, 25, 2.0,  'Need more revision', '2024-04-15'),
--- Student 40 attempts Assessment 31 (Machine Learning Basics)
-(40, 31, 9.5,  'Excellent',          '2025-07-10'),
--- Student 42 attempts Assessment 37 (Data Visualization)
-(42, 37, 1.0,  'Need more revision', '2025-10-06'),
--- Student 44 attempts Assessment 43 (Data Engineering 101)
--- (44, 43, 8.0,  'Excellent',          '2023-12-15'),
--- Student 46 attempts Assessment 45 (Data Engineering 101 – another assessment)
--- (46, 45, 5.0,  'Good',               '2024-02-15'),
--- Student 48 attempts Assessment 4 (Advanced SQL)
-(48, 4,  7.5,  'Good',               '2023-07-06'),
--- Student 50 attempts Assessment 10 (Advanced Python)
-(50, 10, 9.8,  'Excellent',          '2025-02-06'),
--- Student 51 attempts Assessment 16 (Responsive Web Design)
-(51, 16, 0.0,  'Need more revision', '2025-08-06');
-
+(32, 8,  9,  'Excellent',          '2023-11-25'),
+(32, 9,  8.5,  'Excellent',          '2023-12-26'),
+(35, 7, 3.0,  'Need more revision', '2024-04-25'),
+(37, 16, 6.0,  'Good',               '2025-10-20'),
+(50, 10, 2.0,  'Need more revision', '2025-04-15');
+-- (24,28,10,'Excellent','2024-04-25'),
+-- (24,29,7,'Good','2024-04-25'),
+-- (24,30,8,'Excellent','2024-05-25'),
+-- (24,40,8,'Excellent','2024-10-25'),
+-- (24,41,5,'Good','2024-10-25'),
+-- (24,42,6,'Good','2024-11-25');
 
 /* ================================================================================
  PHASE 6: FINANCIALS, REVIEWS, CERTIFICATES
@@ -1027,211 +1011,137 @@ INSERT INTO Payment (PaymentID, StudentID, Amount) VALUES
 
 -- 24 studies course 10 (Modern History – 39.99)
 (1,  24, 39.99),
+(2, 24, 129.99),
+(3,25,49.99),
+(4,26,49.99),
+(5,26,79.99),
+(6,27,89.99),
+(7,28,29.99),
+(8,30,49.99),
+(9,31,49.99),
+(10,32,59.99),
+(11,33,49.99),
+(12,34,49.99),
+(13,34,59.99),
+(14,34,79.99),
+(15,34,99.99),
+(16,35,59.99),
+(17,36,59.99),
+(18,37,69.99),
+(19,38,69.99),
+(20,39,59.99),
+(21,40,79.99),
+(22,41,99.99),
+(23,42,39.99),
+(24,44,89.99),
+(25,45,89.99),
+(26,47,49.99),
+(27,48,59.99),
+(28,49,59.99),
+(29,50,59.99),
+(30,50,89.99),
+(31,51,69.99);
 
--- 25 studies course 1 (Intro to SQL – 49.99)
-(2,  25, 49.99),
-
--- 26 studies course 2 (Advanced SQL – 79.99)
-(3,  26, 79.99),
-
--- 27 studies course 13 (Data Visualization – 89.99)
-(4,  27, 89.99),
-
--- 28 studies course 9 (World History – 29.99)
-(5,  28, 29.99),
-
--- 29 studies course 15 (Data Engineering 101 – 129.99)
-(6,  29, 129.99),
-
--- 30 studies course 1 (Intro to SQL)
-(7,  30, 49.99),
-
--- 31 studies course 2 (Advanced SQL)
-(8,  31, 79.99),
-
--- 32 studies course 3 (Intro to Python – 59.99)
-(9,  32, 59.99),
-
--- 33 studies course 4 (Advanced Python – 89.99)
-(10, 33, 89.99),
-
--- 34 studies course 1 (Intro to SQL)
-(11, 34, 49.99),
-
--- 35 studies course 2 (Advanced SQL)
-(12, 35, 79.99),
-
--- 36 studies course 3 (Intro to Python)
-(13, 36, 59.99),
-
--- 37 studies course 4 (Advanced Python)
-(14, 37, 89.99),
-
--- 38 studies course 6 (Responsive Web Design – 69.99)
-(15, 38, 69.99),
-
--- 39 studies course 7 (Calculus 101 – 59.99)
-(16, 39, 59.99),
-
--- 40 studies course 8 (Linear Algebra – 79.99)
-(17, 40, 79.99),
-
--- 41 studies course 9 (World History)
-(18, 41, 29.99),
-
--- 42 studies course 10 (Modern History)
-(19, 42, 39.99),
-
--- 43 studies course 11 (Machine Learning Basics – 99.99)
-(20, 43, 99.99),
-
--- 44 studies course 12 (Advanced Machine Learning – 119.99)
-(21, 44, 119.99),
-
--- 45 studies course 13 (Data Visualization)
-(22, 45, 89.99),
-
--- 46 studies course 15 (Data Engineering 101)
-(23, 46, 129.99),
-
--- 47 studies course 1 (Intro to SQL)
-(24, 47, 49.99),
-
--- 48 studies course 2 (Advanced SQL)
-(25, 48, 79.99),
-
--- 49 studies course 3 (Intro to Python)
-(26, 49, 59.99),
-
--- 50 studies course 4 (Advanced Python)
-(27, 50, 89.99),
-
--- 51 studies course 6 (Responsive Web Design)
-(28, 51, 69.99);
 
 -- 24. REVIEW (mỗi course 0–2 review, tổng 23 reviews)
 INSERT INTO Review (ReviewID, StudentID, Description, Rating) VALUES
 -- Course 1 (2 reviews)
-(1,  45, 'Clear explanations and easy to follow.', 4),
+(1,  24, 'Clear explanations and easy to follow.', 4),
 (2,  25, 'Good intro but could use more examples.', 4),
 -- Course 2 (2 reviews)
-(3,  46, 'Some sections were too hard for beginners.', 3),
-(4,  26, 'Great depth, well structured.', 4),
+(3,  30, 'Some sections were too hard for beginners.', 3),
+(4,  31, 'Great depth, well structured.', 4),
 -- Course 3 (2 reviews)
-(5,  32, 'Excellent course, learned a lot!', 5),
-(6,  47, 'Could improve pacing, a bit fast.', 3),
+(5,  34, 'Excellent course, learned a lot!', 5),
+(6,  35, 'Could improve pacing, a bit fast.', 3),
 -- Course 4 (2 reviews)
-(7,  33, 'Very well taught, clear OOP concepts.', 5),
-(8,  28, 'Great instructor and good exercises.', 5),
+(7,  40, 'Very well taught, clear concepts.', 5),
+(8,  41, 'Great instructor and good exercises.', 5),
 -- Course 5 (2 reviews)
-(9,  44, 'Basic but helpful for beginners.', 3),
-(10, 34, 'Loved the design principles taught.', 5),
--- Course 6 (2 reviews)
-(11, 49, 'Well-structured and practical.', 5),
-(12, 35, 'Some parts felt outdated.', 3),
--- Course 7 (2 reviews)
-(13, 36, 'Challenging but rewarding.', 4),
-(14, 50, 'Nice course, explanations were solid.', 4),
--- Course 8 (2 reviews)
-(15, 37, 'Too theoretical, not enough practice.', 3),
-(16, 51, 'Fantastic content and good exercises.', 5),
--- Course 9 (1 review)
-(17, 38, 'Very interesting historical overview.', 5),
--- Course 10 (1 review)
-(18, 40, 'Good course but a bit overpriced.', 4),
--- Course 11 (2 reviews)
-(19, 41, 'Amazing introduction to ML.', 5),
-(20, 42, 'A bit difficult but still good.', 3),
--- Course 12 (1 review)
-(21, 43, 'Useful charts and hands-on examples.', 4),
--- Course 13 (2 reviews)
-(22, 44, 'One of the best courses on visualization.', 5),
-(23, 45, 'Good course, but examples were too few.', 4);
+(9,  50, 'Basic but helpful for beginners.', 3),
+(10, 51, 'Loved the design principles taught.', 5);
 INSERT INTO Method (PaymentID, StudentID, Amethod) VALUES
 (1,  24, 'Credit Card'),
-(2,  25, 'Bank Transfer'),
-(3,  26, 'E-Wallet'),
-(4,  27, 'Credit Card'),
-(5,  28, 'Bank Transfer'),
-(6,  29, 'Credit Card'),
-(7,  30, 'E-Wallet'),
-(8,  31, 'Credit Card'),
-(9,  32, 'Bank Transfer'),
-(10, 33, 'Credit Card'),
-(11, 34, 'E-Wallet'),
-(12, 35, 'Bank Transfer'),
-(13, 36, 'Credit Card'),
-(14, 37, 'E-Wallet'),
-(15, 38, 'Bank Transfer'),
-(16, 39, 'Credit Card'),
-(17, 40, 'E-Wallet'),
-(18, 41, 'Credit Card'),
-(19, 42, 'Bank Transfer'),
-(20, 43, 'E-Wallet'),
-(21, 44, 'Credit Card'),
-(22, 45, 'Bank Transfer'),
-(23, 46, 'Credit Card'),
-(24, 47, 'E-Wallet'),
-(25, 48, 'Bank Transfer'),
-(26, 49, 'Credit Card'),
-(27, 50, 'E-Wallet'),
-(28, 51, 'Bank Transfer');
-
+(2,  24, 'Bank Transfer'),
+(3,  25, 'E-Wallet'),
+(4,  26, 'Credit Card'),
+(5,  26, 'Bank Transfer'),
+(6,  27, 'Credit Card'),
+(7,  28, 'E-Wallet'),
+(8,  30, 'Credit Card'),
+(9,  31, 'Bank Transfer'),
+(10, 32, 'Credit Card'),
+(11, 33, 'E-Wallet'),
+(12, 34, 'Bank Transfer'),
+(13, 34, 'Credit Card'),
+(14, 34, 'E-Wallet'),
+(15, 34, 'Bank Transfer'),
+(16, 35, 'Credit Card'),
+(17, 36, 'E-Wallet'),
+(18, 37, 'Credit Card'),
+(19, 38, 'Bank Transfer'),
+(20, 39, 'E-Wallet'),
+(21, 40, 'Credit Card'),
+(22, 41, 'Bank Transfer'),
+(23, 42, 'Credit Card'),
+(24, 44, 'E-Wallet'),
+(25, 45, 'Bank Transfer'),
+(26, 47, 'Credit Card'),
+(27, 48, 'E-Wallet'),
+(28, 49, 'Bank Transfer'),
+(29, 50, 'E-Wallet'),
+(30, 50, 'E-Wallet'),
+(31, 51, 'E-Wallet');
 INSERT INTO Paid_For (PaymentID, StudentID, CourseID) VALUES
-(1,  24, 10),  -- Modern History
-(2,  25, 1),   -- Intro to SQL
-(3,  26, 2),   -- Advanced SQL
-(4,  27, 13),  -- Data Visualization
-(5,  28, 9),   -- World History
-(6,  29, 15),  -- Data Engineering 101
-(7,  30, 1),   -- Intro to SQL
-(8,  31, 2),   -- Advanced SQL
-(9,  32, 3),   -- Intro to Python
-(10, 33, 4),   -- Advanced Python
-(11, 34, 1),   -- Intro to SQL
-(12, 35, 2),   -- Advanced SQL
-(13, 36, 3),   -- Intro to Python
-(14, 37, 4),   -- Advanced Python
-(15, 38, 6),   -- Responsive Web Design
-(16, 39, 7),   -- Calculus 101
-(17, 40, 8),   -- Linear Algebra
-(18, 41, 9),   -- World History
-(19, 42, 10),  -- Modern History
-(20, 43, 11),  -- Machine Learning Basics
-(21, 44, 12),  -- Advanced Machine Learning
-(22, 45, 13),  -- Data Visualization
-(23, 46, 15),  -- Data Engineering 101
-(24, 47, 1),   -- Intro to SQL
-(25, 48, 2),   -- Advanced SQL
-(26, 49, 3),   -- Intro to Python
-(27, 50, 4),   -- Advanced Python
-(28, 51, 6);   -- Responsive Web Design
+(1,  24, 10),
+(2, 24, 15),
+(3,25, 1),
+(4,26, 1),
+(5,26,2),
+(6,27,13),
+(7,28,9),
+(8,30,1),
+(9,31,1),
+(10,32,3),
+(11,33,3),
+(12,34,1),
+(13,34,7),
+(14,34,8),
+(15,34,11),
+(16,35,3),
+(17,36,3),
+(18,37,6),
+(19,38,6),
+(20,39,7),
+(21,40,8),
+(22,41,9),
+(23,42,10),
+(24,44,13),
+(25,45,13),
+(26,47,1),
+(27,48,3),
+(28,49,3),
+(29,50,3),
+(30,50,4),
+(31,51,6);
 
 -- 25. REVIEW_ON (mapping Review -> Course)
 INSERT INTO Review_On (ReviewID, StudentID, CourseID) VALUES
-(1,  45, 1),
+-- Course 1 (2 reviews)
+(1,  24,15),
 (2,  25, 1),
-(3,  46, 2),
-(4,  26, 2),
-(5,  32, 3),
-(6,  47, 3),
-(7,  33, 4),
-(8,  28, 4),
-(9,  44, 5),
-(10, 34, 5),
-(11, 49, 6),
-(12, 35, 6),
-(13, 36, 7),
-(14, 50, 7),
-(15, 37, 8),
-(16, 51, 8),
-(17, 38, 9),
-(18, 40, 10),
-(19, 41, 11),
-(20, 42, 11),
-(21, 43, 12),
-(22, 44, 13),
-(23, 45, 13);
+-- Course 2 (2 reviews)
+(3,  30,1),
+(4,  31, 1),
+-- Course 3 (2 reviews)
+(5,  34, 11),
+(6,  35, 3),
+-- Course 4 (2 reviews)
+(7,  40, 8),
+(8,  41, 9),
+-- Course 5 (2 reviews)
+(9,  50, 3),
+(10, 51,6);
 
 -- 26. CERTIFICATE (10 certificates cho một số học sinh)
 INSERT INTO Certificate (Cer_ID, Cer_Name, Issue_Date, CourseID) VALUES
@@ -1344,5 +1254,6 @@ INSERT INTO Participate (StudentID, CompetitionName) VALUES
 (35, 'Cloud Innovation Jam');
 
 
-
-
+-- Add the missing column that handles the Fee
+ALTER TABLE End_user
+ADD COLUMN Total_Amount_Due DECIMAL(10, 2) DEFAULT 0.00;

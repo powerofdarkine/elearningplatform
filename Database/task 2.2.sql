@@ -1,6 +1,11 @@
 USE elearning_db;
 
-USE elearning_db;
+DROP TRIGGER IF EXISTS tr_check_prerequisite;
+DROP TRIGGER IF EXISTS tr_check_prerequisite_update;
+DROP TRIGGER IF EXISTS tr_amountdue_after_enroll_insert;
+DROP TRIGGER IF EXISTS tr_amountdue_after_enroll_delete;
+DROP TRIGGER IF EXISTS tr_amountdue_after_enroll_update;
+DROP TRIGGER IF EXISTS trg_no_instructor_self_enroll;
 
 DELIMITER $$
 
@@ -140,13 +145,8 @@ BEGIN
           AND SFlag = TRUE;
     END IF;
 END$$
-DROP TRIGGER IF EXISTS tr_check_prerequisite;
-
-DROP TRIGGER IF EXISTS tr_amountdue_after_enroll_insert;
-DROP TRIGGER IF EXISTS tr_amountdue_after_enroll_delete;
-DROP TRIGGER IF EXISTS tr_amountdue_after_enroll_update;
 
 SHOW TRIGGERS;
-DROP TRIGGER IF EXISTS trg_no_instructor_self_enroll;
+
 
 

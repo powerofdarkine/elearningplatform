@@ -2,12 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { BookOpen, LogOut, ArrowRightLeft } from "lucide-react";
+import { BookOpen, LogOut, ArrowRightLeft, CheckCircle, AlertCircle } from "lucide-react";
 import { useState, useTransition, useEffect } from "react";
 import { leaveCourse, transferCourse, getAvailableCoursesForTransfer } from "@/actions/dashboard-actions";
 import { 
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter
-} from "@/components/ui/dialog"; // Ensure you have shadcn dialog or use simple alert/prompt
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter
+} from "@/components/ui/dialog"; 
 
 interface DashboardCourseCardProps {
   id: string;
@@ -16,6 +16,7 @@ interface DashboardCourseCardProps {
   chaptersLength: number;
   progress: number;
   category: string;
+  isPaid: boolean; // <--- NEW PROP
 }
 
 export const DashboardCourseCard = ({
@@ -24,14 +25,14 @@ export const DashboardCourseCard = ({
   imageUrl,
   chaptersLength,
   progress,
-  category
+  category,
+  isPaid // <--- Destructure it
 }: DashboardCourseCardProps) => {
   const [isPending, startTransition] = useTransition();
   const [isTransferOpen, setIsTransferOpen] = useState(false);
   const [transferOptions, setTransferOptions] = useState<any[]>([]);
   const [selectedCourseId, setSelectedCourseId] = useState<string>("");
 
-  // Load transfer options when modal opens
   useEffect(() => {
     if (isTransferOpen) {
         getAvailableCoursesForTransfer(parseInt(id)).then(setTransferOptions);
@@ -39,42 +40,58 @@ export const DashboardCourseCard = ({
   }, [isTransferOpen, id]);
 
   const onLeave = (e: React.MouseEvent) => {
-  e.preventDefault();
-  if (!confirm("Are you sure you want to leave this course?")) return;
+    e.preventDefault();
+    if (!confirm("Are you sure you want to leave this course?")) return;
 
-  startTransition(() => {
-    leaveCourse(parseInt(id))
-      .then((res) => {
-        if (res.error) alert(res.error);
-        else alert(res.success);
-      });
-  });
-};
+    startTransition(() => {
+      leaveCourse(parseInt(id))
+        .then((res) => {
+          if (res.error) alert(res.error);
+          else alert(res.success);
+        })
+        .catch(() => alert("Something went wrong"));
+    });
+  };
 
   const onTransfer = () => {
-  if (!selectedCourseId) return;
-
-  startTransition(() => {
-    transferCourse(parseInt(id), parseInt(selectedCourseId))
-      .then((res) => {
-        if (res.error) {
-          alert(res.error);
-        } else {
-          alert(res.success);
-          setIsTransferOpen(false);
-        }
-      });
-  });
-};
+    if (!selectedCourseId) return;
+    
+    startTransition(() => {
+       transferCourse(parseInt(id), parseInt(selectedCourseId))
+         .then((res) => {
+           if (res.error) alert(res.error);
+           else {
+             alert(res.success);
+             setIsTransferOpen(false);
+           }
+         })
+         .catch(() => alert("Something went wrong"));
+    });
+  };
 
   return (
     <>
-    <div className="group hover:shadow-sm transition overflow-hidden border rounded-lg p-3 h-full bg-white flex flex-col">
+    <div className="group hover:shadow-sm transition overflow-hidden border rounded-lg p-3 h-full bg-white flex flex-col relative">
       <Link href={`/courses/${id}`} className="block relative w-full aspect-video rounded-md overflow-hidden">
         <Image fill className="object-cover" alt={title} src={imageUrl} />
+        
+        {/* --- NEW PAYMENT STATUS BADGE --- */}
+        <div className="absolute top-2 right-2 z-10">
+            {isPaid ? (
+                <div className="bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1 shadow-sm">
+                    <CheckCircle size={12} /> PAID
+                </div>
+            ) : (
+                <div className="bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1 shadow-sm">
+                    <AlertCircle size={12} /> UNPAID
+                </div>
+            )}
+        </div>
+        {/* -------------------------------- */}
+
       </Link>
       
-      <div className="flex flex-col pt-2 flex-grow">
+      <div className="flex flex-col pt-2 grow"> 
         <div className="text-lg md:text-base font-medium group-hover:text-sky-700 transition line-clamp-2">
           {title}
         </div>
@@ -94,10 +111,7 @@ export const DashboardCourseCard = ({
             <p className="text-xs text-emerald-500 font-medium mt-1">{Math.round(progress)}% Complete</p>
         </div>
 
-        {/* Buttons Row */}
         <div className="mt-auto flex gap-x-2">
-            
-            {/* Transfer Button (Trigger) */}
             <button 
                 onClick={(e) => { e.preventDefault(); setIsTransferOpen(true); }}
                 disabled={isPending}
@@ -106,7 +120,6 @@ export const DashboardCourseCard = ({
                 <ArrowRightLeft size={14} /> Transfer
             </button>
 
-            {/* Leave Button */}
             <button 
                 onClick={onLeave}
                 disabled={isPending}
@@ -118,7 +131,6 @@ export const DashboardCourseCard = ({
       </div>
     </div>
 
-    {/* Simple Transfer Modal */}
     <Dialog open={isTransferOpen} onOpenChange={setIsTransferOpen}>
       <DialogContent>
         <DialogHeader>
