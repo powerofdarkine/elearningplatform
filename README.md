@@ -1,4 +1,4 @@
-## Getting Started.
+## Getting Started:
 
 First, install dependencies:
 
@@ -6,7 +6,7 @@ First, install dependencies:
 npm install
 ```
 
-## Set up Database (MySQL)
+## Set up Database (MySQL):
 
 1. Setup MySQL: First, setup your local host using MySQL Configurator. Choose the root user.
 2. Import Data: Open MySQL Workbench and connect to your local host.
@@ -22,9 +22,9 @@ npm install
 
 1. Create an account with Clerk: https://clerk.com/
 2. Make your own sign-in form.
-3. Copy your API keys ans paste it to the .env file
+3. Copy your API keys and paste it to the .env file
 
-## Set Up Environment
+## Set Up Environment:
 
 1. Create a new file named .env in the root directory.
 2. Then pass this the code below to file .env:
@@ -44,7 +44,7 @@ NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
 DATABASE_URL="mysql://root:PASSWORD@localhost:3306/elearning_db"
 ```
 
-## Connect your database to the project
+## Connect your database to the project:
 
 Run the following commands to sync your schema and generate the client:
 ```bash
